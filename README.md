@@ -11,7 +11,7 @@ TopBar : **Polybar**
 
 Shell : **zsh**
 
-File Manager : **Thunar**
+File Manager : **NNN**
 
 Application Menu : **Rofi** 
 
