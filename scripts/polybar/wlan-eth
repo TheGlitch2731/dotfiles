@@ -1,0 +1,52 @@
+#!/bin/bash
+WLANCONNECT=false
+ETHCONNECT=false
+WLANLOOP="wlanloop"
+
+update(){
+    kill $(pgrep -x "$WLANLOOP") > /dev/null 2>&1
+    if $ETHCONNECT;then
+        if $WLANCONNECT;then
+            if [ $(ifconfig enp4s0 | awk '$1=="inet" {print $2}') == "" ];then
+                while [ $(ifconfig enp4s0 | awk '$1=="inet" {print $2}') == "" ];do
+                    sleep 2 #
+                done
+            fi
+            polybar-msg hook wlan-eth 4
+        else
+            if [ $(ifconfig enp4s0 | awk '$1=="inet" {print $2}') == "" ];then
+                while [ $(ifconfig enp4s0 | awk '$1=="inet" {print $2}') == "" ];do
+                    sleep 2 #
+                done
+            fi
+            polybar-msg hook wlan-eth 3
+            sleep 0.5 
+            polybar-msg hook corona 1
+            polybar-msg hook repoup 1
+        fi
+    elif $WLANCONNECT;then
+        ~/scripts/polybar/wlanloop &
+        sleep 1 
+        polybar-msg hook corona 1
+        polybar-msg hook repoup 1
+    else
+        polybar-msg hook wlan-eth 1
+    fi
+
+
+
+}
+
+[ "$(nmcli d | awk '$1=="wlp3s0" {print $3}')" == "connected" ] && WLANCONNECT=true
+[ "$(nmcli d | awk '$1=="enp4s0" {print $3}')" == "connected" ] && ETHCONNECT=true
+update
+#sleep 2 #update a second time after delay in case polybar was not loaded yet
+#update
+
+nmcli d monitor |
+while read LINE; do
+    [ "$LINE" == "enp4s0: connected" ] && ETHCONNECT=true && update
+    [ "$LINE" == "wlp3s0: connected" ] && WLANCONNECT=true && update
+    [ "$LINE" == "enp4s0: unavailable" ] && ETHCONNECT=false && update
+    [ "$LINE" == "wlp3s0: unavailable" ] && WLANCONNECT=false && update
+done

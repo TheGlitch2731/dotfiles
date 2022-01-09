@@ -1,0 +1,7 @@
+#!/bin/sh
+polybar top &
+polybar bot &
+#sleep 0.7
+sleep 1.5
+pgrep wlan-eth && pkill wlan-eth
+~/scripts/polybar/wlan-eth &
