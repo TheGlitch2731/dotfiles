@@ -1,10 +1,10 @@
  # To Do :
  
- * Apply thems
-   * Get a GTK theme
+ * Apply themes
+   * Get a GTK theme (done)
    * Get a QT theme 
    
- * Customize Rofi
+ * Customize Rofi (done)
  * Get a greeter
- * Configure Dunst
+ * Configure Dunst (done)
  
