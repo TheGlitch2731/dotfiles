@@ -124,10 +124,10 @@ XF86Eject
      LANG=C flameshot & flameshot gui
 # Decrease brightness 
 XF86MonBrightnessDown
-    xbacklight -dec 10
+    brightnessctl set 10%-
 # Increase brightness
 XF86MonBrightnessUp
-    xbacklight -inc 10 
+    brightnessctl set +10%
 # Decrease keyboard backlight 
 XF86KbdBrightnessDown 
     brightnessctl --device=smc::kbd_backlight s 10%-
